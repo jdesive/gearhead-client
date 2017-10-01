@@ -1,0 +1,88 @@
+#footer {
+  -fx-border-width: 1 0 0 0;
+  -fx-border-color: gray;
+}
+
+#page-label {
+  -fx-text-fill: black;
+  -fx-font-family: "Arial Narrow";
+}
+
+#title1 {
+  -fx-font-size: 42px;
+  -fx-font-family: "Arial Black";
+  -fx-fill: #818181;
+  -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+
+#car-title, #record-title{
+  -fx-font-size: 32px;
+  -fx-font-family: "Arial Black";
+  -fx-fill: #818181;
+  -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+
+.button {
+  -fx-text-fill: black;
+  -fx-font-family: "Arial Black";
+  -fx-background-color: linear-gradient(#d6d5d5, #b9b9b9);
+}
+
+.button .text {
+  -fx-fill: #818181;
+  -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+
+.button .text .tooltip {
+  -fx-fill: white;
+}
+
+.button:hover {
+  -fx-background-color: linear-gradient(#b9b9b9, #d6d5d5);
+}
+
+.list-view:focused .list-cell:filled:selected {
+  -fx-background-color: rgba(125,246,252,0.7);
+  -fx-border-color: rgba(125,246,252,0.7);
+}
+.list-view .list-cell:filled:selected {
+  -fx-background-color: rgba(141,211,215,1);
+  -fx-text-fill: black;
+  -fx-border-width: 0 0 0 7;
+  -fx-border-color: rgba(125,246,252,1);
+  -fx-border-radius: 10 0 0 10;
+}
+
+.list-view {
+  -fx-font-family: "Arial Black";
+}
+
+.list-view .list-cell:even {
+  -fx-background-color: #d6d5d5;
+  -fx-text-fill: black;
+}
+
+.list-view .list-cell:odd {
+  -fx-background-color: #b9b9b9;
+  -fx-text-fill: black;
+}
+
+.tab-pane {
+  -fx-tab-min-width:130px;
+  -fx-tab-max-width:130px;
+  -fx-tab-min-height:20px;
+  -fx-tab-max-height:20px;
+}
+
+.text-input:readonly {
+  -fx-background-color: linear-gradient(rgba(189,189,189,0.7), rgba(173,172,172,0.7));
+}
+
+.text-area:readonly .content {
+  -fx-background-color: linear-gradient(rgba(189,189,189,0.7), rgba(173,172,172,0.7));
+}
+
+.tooltip .label {
+  -fx-text-fill: white;
+  -fx-font-size: 20px;
+}

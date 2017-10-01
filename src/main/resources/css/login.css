@@ -1,0 +1,39 @@
+#background {
+  -fx-background: #e7e7e7;
+  -fx-font-family: "Arial Black";
+}
+
+#status-label {
+  -fx-text-fill: black;
+  -fx-font-family: "Arial Black";
+}
+
+#status-text-up {
+  -fx-text-fill: green;
+  -fx-font-family: "Arial Black";
+}
+
+#status-text-down {
+  -fx-text-fill: red;
+  -fx-font-family: "Arial Black";
+}
+
+
+#title-text {
+  -fx-font-size: 32px;
+  -fx-font-family: "Arial Black";
+  -fx-fill: #818181;
+  -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+
+.button {
+  -fx-text-fill: black;
+  -fx-font-family: "Arial Black";
+  -fx-font-weight: bold;
+  -fx-background-color: linear-gradient(#d6d5d5, #b9b9b9);
+  -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.button:hover {
+  -fx-background-color: linear-gradient(#b9b9b9, #d6d5d5);
+}
