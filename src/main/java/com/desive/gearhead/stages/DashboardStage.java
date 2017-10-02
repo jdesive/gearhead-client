@@ -17,6 +17,7 @@
 package com.desive.gearhead.stages;
 
 import com.desive.gearhead.GearHeadLogin;
+import com.desive.gearhead.nodes.StyledToolTip;
 import com.desive.gearhead.stages.tabs.HomeTab;
 import com.desive.gearhead.utilities.Utilities;
 import javafx.geometry.Insets;
@@ -95,9 +96,9 @@ public class DashboardStage extends Stage{
         logoutView.setFitWidth(20.0);
         logoutView.setFitHeight(20.0);
         exit.setGraphic(exitView);
-        exit.setTooltip(new Tooltip("Exit the application"));
+        exit.setTooltip(new StyledToolTip("Exit the application"));
         logout.setGraphic(logoutView);
-        logout.setTooltip(new Tooltip("Sign out"));
+        logout.setTooltip(new StyledToolTip("Sign out"));
         controlBox.getChildren().add(logout);
         controlBox.getChildren().add(exit);
 
@@ -106,8 +107,12 @@ public class DashboardStage extends Stage{
         pane.setRight(controlBox);
 
         //Event handlers
-        exit.setOnAction((event) -> this.close());
-        logout.setOnAction((event) -> {this.close();this.parentStage.reset();});
+        exit.setOnAction((event) -> { if(Utilities.throwConfirmationAlert("Exit",
+                "Are you sure you would like to exit?" ,"Would you like to exit the application now? This will exit to desktop." , this)
+                .get() == ButtonType.OK) this.close(); });
+        logout.setOnAction((event) -> {if(Utilities.throwConfirmationAlert("Logout",
+                "Are you sure you would like to logout?" ,"Would you like to logout of the dashboard? This will exit to sign in screen." , this)
+                .get() == ButtonType.OK) {this.close(); this.parentStage.reset();}});
         return pane;
     }
 
@@ -137,7 +142,7 @@ public class DashboardStage extends Stage{
         Label createdBy = new Label("Created by ");
 
         HBox imageBox = new HBox(), linkBox = new HBox();
-        Image icon = new Image("assets/favicon.png"), github = new Image("assets/icons/github-icon.png");
+        Image icon = new Image("assets/gearhead.png"), github = new Image("assets/icons/github-icon.png");
         ImageView logoView = new ImageView(icon), githubView = new ImageView(github);
         logoView.setFitHeight(80.0);
         logoView.setFitWidth(80.0);
@@ -145,10 +150,10 @@ public class DashboardStage extends Stage{
         githubView.setFitWidth(30.0);
 
         githubHpl.setGraphic(githubView);
-        githubHpl.setTooltip(new Tooltip("View source on Github"));
+        githubHpl.setTooltip(new StyledToolTip("View source on Github"));
 
         authorHpl.setGraphic(createdBy);
-        authorHpl.setTooltip(new Tooltip("View my profile"));
+        authorHpl.setTooltip(new StyledToolTip("View my profile"));
 
         linkBox.getChildren().add(githubHpl);
         linkBox.getChildren().add(authorHpl);
@@ -161,7 +166,6 @@ public class DashboardStage extends Stage{
         imageBox.setPadding(new Insets(15));
 
         grid.add(imageBox, 0, 0);
-
 
         githubHpl.setOnAction((event) -> {
             Utilities.getHostServices().showDocument("https://github.com/jdesive/gearhead-client");

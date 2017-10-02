@@ -17,14 +17,12 @@
 package com.desive.gearhead.utilities;
 
 import com.desive.gearhead.GearHeadLogin;
-import com.desive.gearhead.scheduler.Scheduler;
+import com.desive.gearhead.utilities.scheduler.Scheduler;
 import com.desive.gearhead.stages.DashboardStage;
 import javafx.application.HostServices;
+import javafx.css.PseudoClass;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -32,6 +30,7 @@ import javafx.stage.Stage;
 import org.json.simple.parser.JSONParser;
 
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 public class Utilities {
 
@@ -39,6 +38,8 @@ public class Utilities {
     private static JSONParser JSON_PARSER;
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy");
     private static HostServices HOST_SERVICES;
+
+    private static final PseudoClass ERROR_CLASS = PseudoClass.getPseudoClass("error");
 
     public static void init(GearHeadLogin app) {
         SCHEDULER = new Scheduler(5);
@@ -69,6 +70,17 @@ public class Utilities {
         alert.initModality(Modality.APPLICATION_MODAL);
 
         alert.showAndWait();
+    }
+
+    public static Optional<ButtonType> throwConfirmationAlert(String title, String header, String content, DashboardStage parent){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.initOwner(parent);
+        alert.initModality(Modality.APPLICATION_MODAL);
+
+        return alert.showAndWait();
     }
 
     public static BorderPane createFieldLabel(String label, Object value){
@@ -113,5 +125,9 @@ public class Utilities {
 
     public static HostServices getHostServices() {
         return HOST_SERVICES;
+    }
+
+    public static PseudoClass getErrorClass() {
+        return ERROR_CLASS;
     }
 }

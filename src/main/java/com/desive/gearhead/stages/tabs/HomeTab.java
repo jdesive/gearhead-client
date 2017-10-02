@@ -18,6 +18,7 @@ package com.desive.gearhead.stages.tabs;
 
 import com.desive.gearhead.entities.Car;
 import com.desive.gearhead.entities.MaintenanceRecord;
+import com.desive.gearhead.nodes.StyledToolTip;
 import com.desive.gearhead.stages.DashboardStage;
 import com.desive.gearhead.utilities.Utilities;
 import com.desive.gearhead.utilities.requests.Request;
@@ -77,7 +78,8 @@ public class HomeTab extends Tab {
         recordLabelBox.getChildren().add(recordLabel);
 
         GridPane pane = new GridPane();
-        pane.setPrefSize(primaryStage.getScreenMaxWidth(), (primaryStage.getScreenMaxHeight() - (primaryStage.getScreenMaxHeight()%0.3)));
+        pane.setPrefSize(primaryStage.getScreenMaxWidth(), (primaryStage.getScreenMaxHeight() -
+                (primaryStage.getScreenMaxHeight()%0.3)));
         pane.add(carLabelBox, 0 ,0 );
         pane.add(recordLabelBox, 1, 0);
         pane.add(carList, 0, 1);
@@ -86,7 +88,8 @@ public class HomeTab extends Tab {
         carList.setPrefWidth(primaryStage.getScreenMaxWidth()/2);
         maintenanceList.setPrefWidth(primaryStage.getScreenMaxWidth()/2);
 
-        HBox carListController = this.createCarController(carList), maintenanceListController = this.createMaintenanceController(maintenanceList);
+        HBox carListController = this.createCarController(carList), maintenanceListController =
+                this.createMaintenanceController(maintenanceList);
 
         pane.add(carListController, 0, 2);
         pane.add(maintenanceListController, 1, 2);
@@ -97,7 +100,7 @@ public class HomeTab extends Tab {
 
         this.setContent(container);
         this.setClosable(false);
-        this.setTooltip(new Tooltip("View cars and maintenance records"));
+        this.setTooltip(new StyledToolTip("View cars and maintenance records"));
 
         // Event handlers
         carList.setOnMouseClicked((event) -> {
@@ -137,7 +140,8 @@ public class HomeTab extends Tab {
         params.put("size", "30");
         headers.put("Accept", "application/json");
         try {
-            String requestResponse = Request.get(Request.HOSTADDRESS + String.format(RequestMap.LIST_MAINTENANCE_RECORDS.getEndpoint(), carid), params, headers);
+            String requestResponse = Request.get(Request.HOSTADDRESS +
+                    String.format(RequestMap.LIST_MAINTENANCE_RECORDS.getEndpoint(), carid), params, headers);
             JSONObject pageRes = ((JSONObject) Utilities.getJsonParser().parse(requestResponse));
             JSONArray content = (JSONArray) pageRes.get("content");
             currentMaintenancePageNumber = Integer.valueOf(String.valueOf(((Long) pageRes.get("number")+1)));
@@ -177,11 +181,11 @@ public class HomeTab extends Tab {
         box.setAlignment(Pos.CENTER);
         box.setPrefWidth(primaryStage.getScreenMaxWidth()/2);
 
-        view.setTooltip(new Tooltip("View Car details"));
-        next.setTooltip(new Tooltip("Goto next page"));
-        back.setTooltip(new Tooltip("Goto back a page"));
-        addCar.setTooltip(new Tooltip("Add new car"));
-        refresh.setTooltip(new Tooltip("Refresh car list"));
+        view.setTooltip(new StyledToolTip("View Car details"));
+        next.setTooltip(new StyledToolTip("Goto next page"));
+        back.setTooltip(new StyledToolTip("Goto back a page"));
+        addCar.setTooltip(new StyledToolTip("Add new car"));
+        refresh.setTooltip(new StyledToolTip("Refresh car list"));
 
         // Event handlers
         back.setOnAction((event) -> {
@@ -235,30 +239,34 @@ public class HomeTab extends Tab {
         box.setAlignment(Pos.CENTER);
         box.setPrefWidth(primaryStage.getScreenMaxWidth()/2);
 
-        view.setTooltip(new Tooltip("View maintenance record"));
-        next.setTooltip(new Tooltip("Goto next page"));
-        back.setTooltip(new Tooltip("Goto back a page"));
-        addRecord.setTooltip(new Tooltip("Add new record"));
-        refresh.setTooltip(new Tooltip("Refresh maintenance record list"));
+        view.setTooltip(new StyledToolTip("View maintenance record"));
+        next.setTooltip(new StyledToolTip("Goto next page"));
+        back.setTooltip(new StyledToolTip("Goto back a page"));
+        addRecord.setTooltip(new StyledToolTip("Add new record"));
+        refresh.setTooltip(new StyledToolTip("Refresh maintenance record list"));
 
         // Event handlers
         back.setOnAction((event) -> {
             if(currentMaintenancePageNumber > 1){
                 parentList.getItems().clear();
-                getCarMaintenaceList(currentMaintenancePageNumber-2, carList.getSelectionModel().getSelectedItem().getId()).forEach( record -> parentList.getItems().add(new MaintenanceRecord(record)));
+                getCarMaintenaceList(currentMaintenancePageNumber-2, carList.getSelectionModel().getSelectedItem()
+                        .getId()).forEach( record -> parentList.getItems().add(new MaintenanceRecord(record)));
             }
         });
 
         next.setOnAction((event) -> {
             if(currentMaintenancePageNumber >= 1 && currentMaintenancePageNumber != maxMaintenancePageNumber){
                 parentList.getItems().clear();
-                getCarMaintenaceList(currentMaintenancePageNumber, carList.getSelectionModel().getSelectedItem().getId()).forEach( record -> parentList.getItems().add(new MaintenanceRecord(record)));
+                getCarMaintenaceList(currentMaintenancePageNumber, carList.getSelectionModel().getSelectedItem().getId())
+                        .forEach( record -> parentList.getItems().add(new MaintenanceRecord(record)));
             }
         });
 
-        view.setOnAction((event) -> this.createMaintenanceTab(carList.getSelectionModel().getSelectedItem(), maintenanceList.getSelectionModel().getSelectedItem()));
+        view.setOnAction((event) -> this.createMaintenanceTab(carList.getSelectionModel().getSelectedItem(),
+                maintenanceList.getSelectionModel().getSelectedItem()));
         refresh.setOnAction((event) -> this.refreshMaintenanceRecordList());
-        addRecord.setOnAction((event) -> this.createNewMaintenanceRecordTab(carList.getSelectionModel().getSelectedItem() != null ? carList.getSelectionModel().getSelectedItem() : null));
+        addRecord.setOnAction((event) -> this.createNewMaintenanceRecordTab(carList.getSelectionModel().getSelectedItem()
+                != null ? carList.getSelectionModel().getSelectedItem() : null));
 
         return box;
     }
@@ -317,6 +325,11 @@ public class HomeTab extends Tab {
     }
 
     private void refreshMaintenanceRecordList(){
+        if(carList.getSelectionModel().getSelectedItem() == null) {
+            Utilities.throwAlert("No Car selected", "Please select a car", "You have not selected " +
+                    "a car from the car list!", primaryStage);
+            return;
+        }
         currentMaintenancePageNumber--;
         maintenanceList.getItems().clear();
         getCarMaintenaceList(currentMaintenancePageNumber, carList.getSelectionModel().getSelectedItem().getId())

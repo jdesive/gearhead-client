@@ -18,6 +18,7 @@ package com.desive.gearhead.stages.tabs;
 
 import com.desive.gearhead.entities.Car;
 import com.desive.gearhead.entities.MaintenanceRecord;
+import com.desive.gearhead.nodes.StyledToolTip;
 import com.desive.gearhead.stages.DashboardStage;
 import com.desive.gearhead.utilities.Utilities;
 import com.desive.gearhead.utilities.requests.Request;
@@ -100,7 +101,7 @@ public class CarTab extends Tab {
         container.getChildren().add(box);
 
         this.setContent(container);
-        this.setTooltip(new Tooltip("Details for car " + car.toString()));
+        this.setTooltip(new StyledToolTip("Details for car " + car.toString()));
     }
 
     private HBox createMaintenanceController(ListView<MaintenanceRecord> parentList){
@@ -122,9 +123,9 @@ public class CarTab extends Tab {
         box.setAlignment(Pos.CENTER);
         box.setPrefWidth(primaryStage.getScreenMaxWidth()/2);
 
-        view.setTooltip(new Tooltip("View maintenance record"));
-        next.setTooltip(new Tooltip("Goto next page"));
-        back.setTooltip(new Tooltip("Goto back a page"));
+        view.setTooltip(new StyledToolTip("View maintenance record"));
+        next.setTooltip(new StyledToolTip("Goto next page"));
+        back.setTooltip(new StyledToolTip("Goto back a page"));
 
         // Event handlers
         back.setOnAction((event) -> {

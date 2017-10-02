@@ -16,7 +16,11 @@
 
 package com.desive.gearhead.stages.tabs;
 
+import com.desive.gearhead.nodes.StyledToolTip;
 import com.desive.gearhead.stages.DashboardStage;
+import com.desive.gearhead.utilities.Utilities;
+import com.desive.gearhead.utilities.requests.Request;
+import com.desive.gearhead.utilities.requests.RequestMap;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -26,15 +30,23 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import javax.rmi.CORBA.Util;
+import java.io.IOException;
+import java.util.HashMap;
 
 public class NewCarTab extends Tab {
 
     private TextField make, model, color, vin, oilType, oilCapacity, coolantCapacity, oilFilterModel, airFilterModel,
             cabinFilterModel, batteryModel;
+    private DashboardStage primaryStage;
 
     public NewCarTab(DashboardStage primaryStage) {
 
         super("New Car");
+        this.primaryStage = primaryStage;
         ImageView imageView = new ImageView(new Image("assets/icons/car.png"));
         imageView.setFitWidth(20.0);
         imageView.setFitHeight(25.0);
@@ -149,19 +161,98 @@ public class NewCarTab extends Tab {
         container.getChildren().add(box);
 
         save.setOnAction((event) -> {
-
-            // craft json from request
-
-            // send request to backend
-
-            // close tab
+            if(!save()) {
+                return;
+            }
             primaryStage.getTabPane().getTabs().remove(this);
 
         });
 
         this.setContent(container);
-        this.setTooltip(new Tooltip("Create new car"));
+        this.setTooltip(new StyledToolTip("Create new car"));
     }
 
+    private boolean save(){
+
+        if(!doChecks())
+            return false;
+
+        JSONObject jObj = new JSONObject();
+        jObj.put("make", make.getText());
+        jObj.put("model", model.getText());
+        jObj.put("color", color.getText());
+        jObj.put("vin", Long.valueOf(vin.getText()));
+        jObj.put("oilType", oilType.getText());
+        jObj.put("oilCapacity", Float.valueOf(oilCapacity.getText()));
+        jObj.put("coolantCapacity", Float.valueOf(coolantCapacity.getText()));
+        jObj.put("oilFilterModel", oilFilterModel.getText());
+        jObj.put("airFilterModel", airFilterModel.getText());
+        jObj.put("cabinFilterModel", cabinFilterModel.getText());
+        jObj.put("batteryModel", batteryModel.getText());
+        jObj.put("maintenanceRecords", new JSONArray());
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        try {
+            Request.request(Request.HOSTADDRESS + RequestMap.ADD_CAR.getEndpoint(), new HashMap<>(), headers, jObj.toJSONString(), RequestMap.ADD_CAR.getMethod());
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean doChecks(){
+        if(make.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Make");
+            return false;
+        }
+        if(model.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Model");
+            return false;
+        }
+        if(color.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Color");
+            return false;
+        }
+        if(vin.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Vin");
+            return false;
+        }
+        if(oilType.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Oil Type");
+            return false;
+        }
+        if(oilCapacity.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Oil Capacity");
+            return false;
+        }
+        if(coolantCapacity.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Coolant Capacity");
+            return false;
+        }
+        if(oilFilterModel.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Oil Filter Model");
+            return false;
+        }
+        if(airFilterModel.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Ait Filter Model");
+            return false;
+        }
+        if(cabinFilterModel.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Cabin Filter Model");
+            return false;
+        }
+        if(batteryModel.getText().equalsIgnoreCase("")) {
+            this.throwAlert("Battery Model");
+            return false;
+        }
+        return true;
+    }
+
+    private void throwAlert(String value){
+        Utilities.throwAlert("Incorrect value", value + " is blank" ,"Please enter a " + value , primaryStage);
+    }
 
 }

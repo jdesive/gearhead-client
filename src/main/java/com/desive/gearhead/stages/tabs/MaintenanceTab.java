@@ -18,6 +18,7 @@ package com.desive.gearhead.stages.tabs;
 
 import com.desive.gearhead.entities.Car;
 import com.desive.gearhead.entities.MaintenanceRecord;
+import com.desive.gearhead.nodes.StyledToolTip;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
@@ -76,7 +77,7 @@ public class MaintenanceTab extends Tab {
         box.getChildren().add(recordDetailsGrid);
         container.getChildren().add(box);
         this.setContent(container);
-        this.setTooltip(new Tooltip("Details for car " + car.toString()));
+        this.setTooltip(new StyledToolTip("Details for car " + car.toString()));
     }
 
 }

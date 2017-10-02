@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.desive.gearhead.scheduler;
+package com.desive.gearhead.utilities.scheduler;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;

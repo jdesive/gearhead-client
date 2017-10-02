@@ -33,10 +33,6 @@
   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
 }
 
-.button .text .tooltip {
-  -fx-fill: white;
-}
-
 .button:hover {
   -fx-background-color: linear-gradient(#b9b9b9, #d6d5d5);
 }
@@ -74,6 +70,31 @@
   -fx-tab-max-height:20px;
 }
 
+.text-input {
+  -fx-background-color: linear-gradient(rgba(232,240,241,0.7), rgba(210,219,220,0.7));
+}
+
+.text-area .content {
+  -fx-background-color: linear-gradient(rgba(232,240,241,0.7), rgba(210,219,220,0.7));
+}
+
+.text-field:error {
+   -fx-focus-color: #d35244;
+       -fx-faint-focus-color: #d3524422;
+
+       -fx-highlight-fill: -fx-accent;
+       -fx-highlight-text-fill: white;
+       -fx-background-color:
+           -fx-focus-color,
+           -fx-control-inner-background,
+           -fx-faint-focus-color,
+           linear-gradient(rgba(232,240,241,0.7), rgba(210,219,220,0.7));
+       -fx-background-insets: -0.2, 1, -1.4, 3;
+       -fx-background-radius: 3, 2, 4, 0;
+       -fx-prompt-text-fill: transparent;
+}
+
+
 .text-input:readonly {
   -fx-background-color: linear-gradient(rgba(189,189,189,0.7), rgba(173,172,172,0.7));
 }
@@ -82,7 +103,9 @@
   -fx-background-color: linear-gradient(rgba(189,189,189,0.7), rgba(173,172,172,0.7));
 }
 
-.tooltip .label {
+.stooltip, .tooltip {
+  -fx-fill: white;
   -fx-text-fill: white;
-  -fx-font-size: 20px;
+  -fx-font-size: 16px;
+  -fx-font-family: "Arial Narrow";
 }

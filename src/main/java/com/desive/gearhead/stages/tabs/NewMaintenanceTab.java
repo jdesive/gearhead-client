@@ -17,6 +17,7 @@
 package com.desive.gearhead.stages.tabs;
 
 import com.desive.gearhead.entities.Car;
+import com.desive.gearhead.nodes.StyledToolTip;
 import com.desive.gearhead.stages.DashboardStage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -126,7 +127,7 @@ public class NewMaintenanceTab extends Tab {
         });
 
         this.setContent(container);
-        this.setTooltip(new Tooltip("Create new maintenance record"));
+        this.setTooltip(new StyledToolTip("Create new maintenance record"));
     }
 
 

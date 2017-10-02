@@ -23,6 +23,7 @@ import com.desive.gearhead.utilities.requests.RequestMap;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.css.PseudoClass;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -44,6 +45,7 @@ import java.util.HashMap;
 
 public class GearHeadLogin  extends Application{
 
+    private Text scenetitle;
     private Label statusLabel, statusValue;
     private TextField userTextField;
     private PasswordField pwBox;
@@ -77,7 +79,7 @@ public class GearHeadLogin  extends Application{
         primaryStage.setScene(scene); // Set Scene
 
         // Create and add Title
-        Text scenetitle = new Text("Sign in");
+        scenetitle = new Text("Sign in");
         scenetitle.setId("title-text");
         grid.add(scenetitle, 0, 0, 2, 1);
 
@@ -104,10 +106,10 @@ public class GearHeadLogin  extends Application{
 
         // Status label
         statusLabel = new Label("API Health: ");
-        statusValue = new Label("UP");
+        statusValue = new Label("DOWN");
         HBox statusBox = new HBox();
         statusLabel.setId("status-label");
-        statusValue.setId("status-text-up");
+        statusValue.setId("status-text-down");
         statusBox.getChildren().add(statusLabel);
         statusBox.getChildren().add(statusValue);
         statusBox.setAlignment(Pos.CENTER_LEFT);
@@ -133,18 +135,43 @@ public class GearHeadLogin  extends Application{
             }
         }));
         statusHealthTimer.setCycleCount(Timeline.INDEFINITE);
-        statusHealthTimer.play();
-
+        statusHealthTimer.playFrom(Duration.seconds(14.5));
         signButton.setOnAction( (event) -> {
 
-            //Check with api/signup for creds
-            if(!login())
+            if(statusValue.getText().equalsIgnoreCase("down")){
+                Utilities.throwAlert("Backend API error", "API error", "It seems that the API is " +
+                        "not online! Please check " + Request.HOSTADDRESS + " and try again.");
                 return;
+            }
+
+            if(userTextField.getText().equals("")){
+                userTextField.pseudoClassStateChanged(Utilities.getErrorClass(), true);
+                return;
+            }
+            userTextField.pseudoClassStateChanged(Utilities.getErrorClass(), false);
+
+            if(pwBox.getText().equals("")){
+                pwBox.pseudoClassStateChanged(Utilities.getErrorClass(), true);
+                return;
+            }
+            pwBox.pseudoClassStateChanged(Utilities.getErrorClass(), false);
+
+            //Check with api/signup for creds
+            if(!login()) {
+                userTextField.pseudoClassStateChanged(Utilities.getErrorClass(), true);
+                pwBox.pseudoClassStateChanged(Utilities.getErrorClass(), true);
+                return;
+            }
+            userTextField.pseudoClassStateChanged(Utilities.getErrorClass(), false);
+            pwBox.pseudoClassStateChanged(Utilities.getErrorClass(), false);
+
             //Start main application
             primaryStage.close();
             new DashboardStage(this).show();
         }
         );
+
+        pwBox.setOnAction((event) -> signButton.fire());
 
         // Shutdown hook
         primaryStage.setOnCloseRequest((event) -> {
@@ -157,13 +184,16 @@ public class GearHeadLogin  extends Application{
     }
 
     public void reset(){
+        this.scenetitle.setText("Sign in");
         this.userTextField.setText("");
         this.pwBox.setText("");
+        this.userTextField.requestFocus();
         statusHealthTimer.play();
         this.primaryStage.show();
     }
 
     private boolean login(){
+        scenetitle.setText("Welcome, " + userTextField.getText());
         HashMap<String, String> params = new HashMap<>();
         params.put("username", userTextField.getText());
         params.put("password", pwBox.getText());
